@@ -4,6 +4,11 @@ import { useParams } from "react-router-dom";
 import { ApiError, downloadShopFile, shopAction, shopOrder } from "../api";
 import { loadAuth } from "../session";
 
+function contactLabel(name: string | null, phone: string | null) {
+  const parts = [name, phone].filter((part): part is string => Boolean(part));
+  return parts.length > 0 ? parts.join(" · ") : "Guest";
+}
+
 export function ShopOrderPage() {
   const { orderId = "" } = useParams();
   const auth = loadAuth();
@@ -38,9 +43,7 @@ export function ShopOrderPage() {
       <div>
         <p className="text-sm text-stone-500">{current.order_number}</p>
         <h1 className="text-4xl font-semibold tracking-[0.2em]">{current.pickup_code ?? "Draft"}</h1>
-        <p className="mt-2">
-          {current.contact_name} · {current.contact_phone}
-        </p>
+        <p className="mt-2">{contactLabel(current.contact_name, current.contact_phone)}</p>
         <p className="text-sm text-stone-600">{current.status.replaceAll("_", " ")}</p>
       </div>
       <section className="rounded-xl bg-white p-4">

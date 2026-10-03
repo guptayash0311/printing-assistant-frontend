@@ -88,8 +88,8 @@ export type Order = {
   service_fee: string;
   grand_total: string;
   pricing_version: number | null;
-  contact_name: string;
-  contact_phone: string;
+  contact_name: string | null;
+  contact_phone: string | null;
   notes: string | null;
   rejection_reason: string | null;
   created_at: string;

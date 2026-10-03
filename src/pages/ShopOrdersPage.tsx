@@ -4,6 +4,11 @@ import { Link } from "react-router-dom";
 import { ApiError, shopOrders } from "../api";
 import { loadAuth } from "../session";
 
+function contactLabel(name: string | null, phone: string | null) {
+  const parts = [name, phone].filter((part): part is string => Boolean(part));
+  return parts.length > 0 ? parts.join(" · ") : "Guest";
+}
+
 export function ShopOrdersPage() {
   const auth = loadAuth();
   const [pickup, setPickup] = useState("");
@@ -56,7 +61,7 @@ export function ShopOrdersPage() {
             <div>
               <p className="font-medium">{order.pickup_code ?? order.order_number}</p>
               <p className="text-sm text-stone-600">
-                {order.contact_name} · {order.status.replaceAll("_", " ")}
+                {contactLabel(order.contact_name, order.contact_phone)} · {order.status.replaceAll("_", " ")}
               </p>
             </div>
             <Link className="text-sm underline" to={`/shop/orders/${order.id}`}>
