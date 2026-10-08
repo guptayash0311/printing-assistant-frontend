@@ -58,9 +58,16 @@ export function getShop(slug: string) {
 }
 
 export function createOrder(slug: string, contactName: string, contactPhone: string) {
-  return api<Order>(`/public/shops/${slug}/orders`, {
-    body: { contact_name: contactName, contact_phone: contactPhone },
-  });
+  const body: { contact_name?: string; contact_phone?: string } = {};
+  const name = contactName.trim();
+  const phone = contactPhone.trim();
+  if (name) {
+    body.contact_name = name;
+  }
+  if (phone) {
+    body.contact_phone = phone;
+  }
+  return api<Order>(`/public/shops/${slug}/orders`, { body });
 }
 
 export function getCustomerOrder(orderId: string, orderToken: string) {
