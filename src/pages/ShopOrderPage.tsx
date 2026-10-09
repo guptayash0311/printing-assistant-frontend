@@ -48,30 +48,33 @@ export function ShopOrderPage() {
       </div>
       <section className="rounded-xl bg-white p-4">
         <h2 className="font-medium">Files and instructions</h2>
-        <ul className="mt-3 space-y-2 text-sm">
-          {current.files.map((file) => (
-            <li key={file.id} className="flex justify-between gap-3">
-              <span>
-                {file.original_filename}
-                {file.page_count ? ` · ${file.page_count} pages` : ""}
-              </span>
-              <button
-                className="underline"
-                type="button"
-                onClick={() => downloadShopFile(auth!.access_token, current.id, file.id, file.original_filename)}
-              >
-                Download
-              </button>
-            </li>
-          ))}
-        </ul>
-        <ul className="mt-4 space-y-2 text-sm">
-          {current.segments.map((segment) => (
-            <li key={segment.id}>
-              Pages {segment.page_start}-{segment.page_end}, {segment.paper_size}, {segment.color_mode}, {segment.sides},{" "}
-              {segment.orientation}, {segment.copies} copies
-            </li>
-          ))}
+        <ul className="mt-3 space-y-4 text-sm">
+          {current.files.map((file) => {
+            const segments = current.segments.filter((segment) => segment.file_id === file.id);
+            return (
+              <li key={file.id}>
+                <div className="flex justify-between gap-3">
+                  <span>
+                    {file.original_filename}
+                    {file.page_count ? ` · ${file.page_count} pages` : ""}
+                  </span>
+                  <button
+                    className="underline"
+                    type="button"
+                    onClick={() => downloadShopFile(auth!.access_token, current.id, file.id, file.original_filename)}
+                  >
+                    Download
+                  </button>
+                </div>
+                {segments.map((segment) => (
+                  <p key={segment.id} className="mt-1 text-stone-600">
+                    Pages {segment.page_start}-{segment.page_end}, {segment.paper_size}, {segment.color_mode}, {segment.sides},{" "}
+                    {segment.copies} copies
+                  </p>
+                ))}
+              </li>
+            );
+          })}
         </ul>
         <p className="mt-4 text-lg font-semibold">
           {current.currency} {current.grand_total}

@@ -95,6 +95,13 @@ export async function uploadFile(orderId: string, orderToken: string, file: File
   return (await response.json()) as OrderFile;
 }
 
+export function deleteFile(orderId: string, orderToken: string, fileId: string) {
+  return api<Order>(`/public/orders/${orderId}/files/${fileId}`, {
+    method: "DELETE",
+    orderToken,
+  });
+}
+
 export function saveSegments(orderId: string, orderToken: string, segments: unknown[]) {
   return api<Order>(`/public/orders/${orderId}/segments`, {
     method: "PUT",
